@@ -62,7 +62,7 @@ sub S_public {
         warn "  \$! follows:\n$!\n" if $!;
     }
 
-    foreach my $callback ( @$callbacks ){
+    foreach my $callback ( @$callbacks ) {
         if ( $text !~ $callback->{trigger} ) {
             next;
         }
