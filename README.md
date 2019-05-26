@@ -2,6 +2,8 @@
 
 This pocoirc plugin forwards text which matches certain regular expressions as JSON to an external service, and optionally writes replies back to the channel where they came from.
 
+See the `examples/` directory for an example microservice which replies `yolo in bolo, Dude` when triggered by Dude's message.
+
 ### example usage
 
     $ cat pocoirc-config.yaml
