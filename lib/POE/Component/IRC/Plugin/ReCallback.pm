@@ -78,7 +78,17 @@ sub S_public {
             'Yolo' => 'in bolo',
         );
 
-        my $reply = JSON::from_json($response->decoded_content);
+        my $reply = '';
+        if ( ! $response->is_success ) {
+            warn "Response from <$callback->{url}> was not a success: <@{[ $response->status_line ]}>\n";
+            warn $response->decoded_content . "\n";
+            next;
+        }
+        my $ct = $response->header('Content-Type') // '(no Content-Type header in response)';
+        if ( $ct ne 'application/json' ) {
+            warn "Response Content-Type is not 'application/json' (it's <$ct>), trying to parse it anyway...\n";
+        }
+        $reply = JSON::from_json($response->decoded_content);
         if ( exists $reply->{reply} ){
             ## This is the yield for the reply to the channel
             $irc->yield(
