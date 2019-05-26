@@ -12,6 +12,7 @@ use JSON qw();
 
 my $ua = LWP::UserAgent->new(
     agent => 'Salveo Mattini/666.42',
+    timeout => 2,
 );
 
 sub new {
@@ -81,6 +82,9 @@ sub S_public {
         if ( ! $response->is_success ) {
             warn "Response from <$callback->{url}> was not a success: <@{[ $response->status_line ]}>\n";
             warn $response->decoded_content . "\n";
+            if ( my $client_warning = $response->header('Client-Warning') ) {
+                warn "client_warning:<$client_warning>\n";
+            }
             next;
         }
         my $ct = $response->header('Content-Type') // '(no Content-Type header in response)';
