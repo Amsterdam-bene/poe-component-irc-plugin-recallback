@@ -55,7 +55,13 @@ sub S_public {
     # allow optionally addressing the bot
     $text =~ s/\A$my_own_nick[:,\s]*//;
 
-    my $callbacks = do "callbacks.pl";
+    my $callbacks = do "./callbacks.pl";
+    if ( ref $callbacks ne 'ARRAY' ) {
+        warn __PACKAGE__.": Attempting to load ./callbacks.pl didn't return an array\n";
+        warn "  \$@ follows:\n$@\n" if $@;
+        warn "  \$! follows:\n$!\n" if $!;
+    }
+
     foreach my $callback ( @$callbacks ){
         if ( $text !~ $callback->{trigger} ) {
             next;
