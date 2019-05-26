@@ -15,7 +15,7 @@ Launch this and run in another shell:
 $ curl \
     -XPOST \
     --header 'Content-Type: application/json' \
-    --data '{"channel":"##dipreathon","my_own_nick":"HeliumMuskBot","nick":"jojo","text":"yolo anywhere!"}' \
+    --data '{"channel":"##dipreathon","my_own_nick":"HeliumMuskBot","nick":"jojo","sender":"jojo!~jojo@wherever","text":"yolo anywhere!"}' \
     http://localhost:9999/yolo
 '''
 

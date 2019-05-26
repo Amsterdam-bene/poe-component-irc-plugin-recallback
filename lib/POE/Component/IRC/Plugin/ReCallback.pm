@@ -38,8 +38,9 @@ sub PCI_unregister {
 sub S_public {
     my ($self, $irc) = (shift, shift);
 
-    my $nick = ${ +shift };
-    $nick =~ s/!.*$//;
+    my $sender = ${ +shift };
+    my $sender_nick = $sender;
+    $sender_nick =~ s/!.*$//;
 
     my $my_own_nick = $irc->{nick};
 
@@ -71,7 +72,8 @@ sub S_public {
         my $response = $ua->post($callback->{url},
             Content => JSON::to_json ({
                 text => $text,
-                nick => $nick,
+                nick => $sender_nick,
+                sender => $sender,
                 my_own_nick => $my_own_nick,
                 channel => $channel,
             }),

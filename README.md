@@ -37,6 +37,7 @@ This example will POST a JSON to the url when someone says something that begins
     {
         "text" => "hello bot, say something",
         "nick" => "Rocco",
+        "sender" => "Rocco!~rtanica@unaffiliated/rocco",
         "my_own_nick" => "DeBot",
         "channel" => "##horsing-around"
     }
