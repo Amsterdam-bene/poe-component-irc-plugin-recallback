@@ -35,6 +35,7 @@ This example will POST a JSON to the url when someone says something that begins
     Accept: application/json
 
     {
+        "_meta": { "api_version": 1 },
         "text" => "hello bot, say something",
         "nick" => "Rocco",
         "sender" => "Rocco!~rtanica@unaffiliated/rocco",

@@ -64,6 +64,11 @@ sub _handle_callbacks {
         }
 
         my $payload = {
+            _meta => {
+                # we bump the API version when we make backwards-incompatible
+                # changes to the shape of the request/reply JSON
+                api_version => 1,
+            },
             text => $text,
             nick => $sender_nick,
             sender => $sender,
