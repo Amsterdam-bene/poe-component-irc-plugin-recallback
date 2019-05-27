@@ -43,11 +43,20 @@ This example will POST a JSON to the url when someone says something that begins
         "channel" => "##horsing-around"
     }
 
-The microservice should reply with a JSON, and if the response document has a "reply" field, that's what will be replied on the channel, e.g.:
+The microservice should reply with a JSON, and if the response document has a `reply` field, that's what will be replied on the channel, e.g.:
 
     HTTP/1.1 200 OK
     Content-Type: application/json
 
     {"reply":"Hi there, Rocco"}
+
+If it wants to send more than one message, it can do so with a `replies` field:
+
+    HTTP/1.1 200 OK
+    Content-Type: application/json
+
+    {"replies":["one message","another message","and so on"]}
+
+The separate messages will be sent one at a time, in order.
 
 [modeline]: # ( vim: set wrap tabstop=4 shiftwidth=4 expandtab fileencoding=utf-8 spell spelllang=en: )

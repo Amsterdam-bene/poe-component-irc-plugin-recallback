@@ -107,6 +107,18 @@ sub _handle_callbacks {
                 $sanitized_reply,
             );
         }
+        if ( exists $result->{replies} && ref $result->{replies} eq 'ARRAY' ) {
+            foreach my $one_reply ( @{ $result->{replies} } ) {
+                my $sanitized_reply = $one_reply;
+                $sanitized_reply =~ s/[\r\n]+/ /g;
+
+                ## This is the yield for the reply to the channel
+                $irc->yield(
+                    notice => $where_to_reply,
+                    $sanitized_reply,
+                );
+            }
+        }
     }
 }
 
