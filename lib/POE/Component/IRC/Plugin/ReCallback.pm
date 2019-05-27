@@ -97,11 +97,14 @@ sub _handle_callbacks {
         }
 
         my $result = JSON::from_json($response->decoded_content);
-        if ( exists $result->{reply} ){
+        if ( exists $result->{reply} ) {
+            my $sanitized_reply = $result->{reply};
+            $sanitized_reply =~ s/[\r\n]+/ /g;
+
             ## This is the yield for the reply to the channel
             $irc->yield(
                 notice => $where_to_reply,
-                $result->{reply},
+                $sanitized_reply,
             );
         }
     }
