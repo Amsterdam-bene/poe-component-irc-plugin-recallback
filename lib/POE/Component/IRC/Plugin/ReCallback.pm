@@ -91,7 +91,7 @@ sub _handle_callbacks {
             next;
         }
 
-        my $ct = $response->header('Content-Type') // '(no Content-Type header in response)';
+        my ($ct, $ct_directives) = split /;/, $response->header('Content-Type') // '(no Content-Type header in response)';
         if ( $ct ne 'application/json' ) {
             warn "Response Content-Type is not 'application/json' (it's <$ct>), trying to parse it anyway...\n";
         }
