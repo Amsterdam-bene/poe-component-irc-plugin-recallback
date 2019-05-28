@@ -106,7 +106,7 @@ sub _handle_callbacks {
             warn "$exception\n";
             warn "\n";
             warn "Full response follows:\n";
-            warn $response->decoded_content . "\n";
+            warn $response->as_string . "\n";
         };
 
         if ( exists $result->{reply} ) {
