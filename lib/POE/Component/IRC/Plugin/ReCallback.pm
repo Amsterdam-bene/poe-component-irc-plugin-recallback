@@ -107,8 +107,22 @@ sub _handle_callbacks {
             warn "\n";
             warn "Full response follows:\n";
             warn $response->as_string . "\n";
+
+            $result->{debug} = JSON::to_json({
+                diag => "Error while unserializing JSON response",
+                exception => $exception,
+            });
         };
 
+        if ( exists $result->{debug} ) {
+            my $sanitized_debug = $result->{debug};
+            $sanitized_debug =~ s/[\r\n]+/ /g;
+
+            $irc->yield(
+                notice => $sender_nick,
+                $sanitized_debug,
+            );
+        }
         if ( exists $result->{reply} ) {
             my $sanitized_reply = $result->{reply};
             $sanitized_reply =~ s/[\r\n]+/ /g;
