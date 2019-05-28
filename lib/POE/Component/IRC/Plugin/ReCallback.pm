@@ -96,7 +96,19 @@ sub _handle_callbacks {
             warn "Response Content-Type is not 'application/json' (it's <$ct>), trying to parse it anyway...\n";
         }
 
-        my $result = JSON::from_json($response->decoded_content);
+        my $result = {};
+        eval {
+            $result = JSON::from_json($response->decoded_content);
+            1;
+        } or do {
+            my ($exception) = $@;
+            warn "Error while unserializing JSON response; Full error follows:\n";
+            warn "$exception\n";
+            warn "\n";
+            warn "Full response follows:\n";
+            warn $response->decoded_content . "\n";
+        };
+
         if ( exists $result->{reply} ) {
             my $sanitized_reply = $result->{reply};
             $sanitized_reply =~ s/[\r\n]+/ /g;
