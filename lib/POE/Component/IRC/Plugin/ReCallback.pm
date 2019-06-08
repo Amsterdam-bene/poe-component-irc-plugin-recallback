@@ -3,7 +3,6 @@ package POE::Component::IRC::Plugin::ReCallback;
 use strict;
 use warnings;
 
-
 use POE::Component::IRC;
 use POE::Component::IRC::Plugin qw( :ALL );
 
