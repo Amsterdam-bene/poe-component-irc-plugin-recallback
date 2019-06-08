@@ -3,6 +3,7 @@ package POE::Component::IRC::Plugin::ReCallback;
 use strict;
 use warnings;
 
+
 use POE::Component::IRC;
 use POE::Component::IRC::Plugin qw( :ALL );
 
@@ -17,7 +18,7 @@ my $ua = LWP::UserAgent->new(
 sub new {
     my ($package, %args) = @_;
 
-    my $self = bless {}, $package;
+    my $self = bless \%args, $package;
 
     return $self;
 }
@@ -51,9 +52,17 @@ sub _handle_callbacks {
     # allow optionally addressing the bot
     $text =~ s/\A$my_own_nick[:,\s]*//;
 
-    my $callbacks = do "./callbacks.pl";
+    my $config_file = "";
+    if (!defined $self->{config_file}) {
+        $config_file = "./callback.pl";
+    }
+    else{
+        $config_file = $self->{config_file};
+    }
+
+    my $callbacks = do $config_file;
     if ( ref $callbacks ne 'ARRAY' ) {
-        warn __PACKAGE__.": Attempting to load ./callbacks.pl didn't return an array\n";
+        warn __PACKAGE__.": Attempting to load $config_file didn't return an array\n";
         warn "  \$@ follows:\n$@\n" if $@;
         warn "  \$! follows:\n$!\n" if $!;
     }
