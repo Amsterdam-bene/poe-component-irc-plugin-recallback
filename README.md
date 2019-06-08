@@ -9,7 +9,7 @@ See the `examples/` directory for an example microservice which replies `yolo in
     $ cat pocoirc-config.yaml
     [...]
     local_plugins:
-        - [ReCallback]
+        - [ReCallback, {config_file: /usr/src/bot/etc/recallback.pl}]
     [...]
 
     $ cat callbacks.pl
