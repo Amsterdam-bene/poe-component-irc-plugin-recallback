@@ -99,14 +99,25 @@ sub _handle_callbacks {
             next;
         }
 
-        my ($ct, $ct_directives) = split /;/, $response->header('Content-Type') // '(no Content-Type header in response)';
-        if ( $ct ne 'application/json' ) {
-            warn "Response Content-Type is not 'application/json' (it's <$ct>), trying to parse it anyway...\n";
+        my $json_decode_params = {};
+        my $response_content_type = $response->header('Content-Type') // 'application/json; charset=utf-8; _source=defaults';
+        my $ct_directives_map = {};
+        my ($ct, @ct_directives) = split /;\s*/, $response_content_type;
+        if ( $ct ne 'application/json' && $ct ne 'text/json' ) {
+            warn "Response Content-Type is not 'application/json' or 'text/json' (it's <$ct>), trying to parse it anyway...\n";
+        }
+        foreach my $directive ( @ct_directives ) {
+            my ($k, $v) = split /=/, $directive, 2;
+            $ct_directives_map->{$k} = $v;
+        }
+        $ct_directives_map->{charset} //= 'utf-8';
+        if ( $ct_directives_map->{charset} eq 'utf-8' ) {
+            $json_decode_params->{utf8} = 1;
         }
 
         my $result = {};
         eval {
-            $result = JSON::from_json($response->decoded_content);
+            $result = JSON::from_json($response->decoded_content, $json_decode_params);
             1;
         } or do {
             my ($exception) = $@;
