@@ -36,6 +36,14 @@ sub PCI_unregister {
     return 1;
 }
 
+sub _sanitize ($) {
+    my ($text) = @_;
+
+    $text =~ s/\s+/ /g;
+
+    return $text;
+}
+
 sub _handle_callbacks {
     my ($self, $irc, $sender_ref, $recipients_ref, $message_ref, $is_identified) = @_;
 
@@ -107,11 +115,23 @@ sub _handle_callbacks {
             warn "\n";
             warn "Full response follows:\n";
             warn $response->as_string . "\n";
+
+            $result->{debug} = JSON::to_json({
+                diag => "Error while unserializing JSON response",
+                exception => $exception,
+            });
         };
 
+        if ( exists $result->{debug} ) {
+            my $sanitized_debug = _sanitize $result->{debug};
+
+            $irc->yield(
+                notice => $sender_nick,
+                $sanitized_debug,
+            );
+        }
         if ( exists $result->{reply} ) {
-            my $sanitized_reply = $result->{reply};
-            $sanitized_reply =~ s/[\r\n]+/ /g;
+            my $sanitized_reply = _sanitize $result->{reply};
 
             ## This is the yield for the reply to the channel
             $irc->yield(
@@ -121,8 +141,7 @@ sub _handle_callbacks {
         }
         if ( exists $result->{replies} && ref $result->{replies} eq 'ARRAY' ) {
             foreach my $one_reply ( @{ $result->{replies} } ) {
-                my $sanitized_reply = $one_reply;
-                $sanitized_reply =~ s/[\r\n]+/ /g;
+                my $sanitized_reply = _sanitize $one_reply;
 
                 ## This is the yield for the reply to the channel
                 $irc->yield(

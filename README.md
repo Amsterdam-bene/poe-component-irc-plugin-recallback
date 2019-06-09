@@ -59,4 +59,13 @@ If it wants to send more than one message, it can do so with a `replies` field:
 
 The separate messages will be sent one at a time, in order.
 
+If you have some verbose debugging which should be sent back in a private query to the person triggering the call (e.g. during development of a callback, you'd like to see some additional information), you can add a `debug` field, which will be sent as a private message.
+
+    HTTP/1.1 200 OK
+    Content-Type: application/json
+
+    {"reply":"OK, cool","debug":"this is what happened behind the scenes"}
+
+The `OK, cool` string will be replied, and the other phrase will be sent as a private message.
+
 [modeline]: # ( vim: set wrap tabstop=4 shiftwidth=4 expandtab fileencoding=utf-8 spell spelllang=en: )
