@@ -92,8 +92,8 @@ sub _handle_callbacks {
 
         my $response = $ua->post(
             $callback->{url},
-            'Content-Type' => 'application/json',
-            'Content' => JSON::to_json($payload),
+            'Content-Type' => 'application/json; charset=UTF-8',
+            'Content' => JSON::to_json($payload, { utf8 => 1 }),
         );
 
         if ( ! $response->is_success ) {
