@@ -55,10 +55,6 @@ sub _handle_callbacks {
     my $text = $$message_ref;
     Encode::_utf8_on( $text );
 
-    my $my_own_nick = $irc->{nick};
-    # allow optionally addressing the bot
-    $text =~ s/\A$my_own_nick[:,\s]*//;
-
     my $config_file = "";
     if (!defined $self->{config_file}) {
         $config_file = "./callback.pl";
@@ -74,8 +70,10 @@ sub _handle_callbacks {
         warn "  \$! follows:\n$!\n" if $!;
     }
 
+    my $my_own_nick = $irc->{nick};
     foreach my $callback ( @$callbacks ) {
-        if ( $text !~ $callback->{trigger} ) {
+        # allow optionally addressing the bot
+        if ( $text !~ qr{ (?:\A$my_own_nick[:,\s]*)? $callback->{trigger} }x ) {
             next;
         }
 
