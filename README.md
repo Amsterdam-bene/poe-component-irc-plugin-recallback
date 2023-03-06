@@ -21,6 +21,7 @@ See the `examples/` directory for an example microservice which replies `yolo in
         {
             trigger => qr/whatever/,
             url => 'https://whatever-handler.io/',
+            timeout => 3,  # optional, defaults to 2 seconds
         },
     ];
 
@@ -43,7 +44,7 @@ This example will POST a JSON to the url when someone says something that begins
         "channel" => "##horsing-around"
     }
 
-The microservice should reply with a JSON, and if the response document has a `reply` field, that's what will be replied on the channel, e.g.:
+The microservice should reply (within the configured timeout in seconds, which defaults to 2) with a JSON, and if the response document has a `reply` field, that's what will be replied on the channel, e.g.:
 
     HTTP/1.1 200 OK
     Content-Type: application/json

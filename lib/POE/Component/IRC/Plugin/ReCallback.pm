@@ -9,9 +9,13 @@ use POE::Component::IRC::Plugin qw( :ALL );
 use LWP::UserAgent;
 use JSON qw();
 
+use constant {
+    DEFAULT_TIMEOUT => 2,
+};
+
 my $ua = LWP::UserAgent->new(
     agent => 'Salveo Mattini/666.42',
-    timeout => 2,
+    timeout => DEFAULT_TIMEOUT,
 );
 
 sub new {
@@ -90,6 +94,7 @@ sub _handle_callbacks {
             channel => $where_to_reply,
         };
 
+        $ua->timeout($callback->{timeout} // DEFAULT_TIMEOUT);
         my $response = $ua->post(
             $callback->{url},
             'Content-Type' => 'application/json; charset=UTF-8',
